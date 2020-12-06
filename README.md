@@ -1,4 +1,4 @@
-# huffman_textToBinary
+# huffman_textToBinary (By Nand Nandan Arora Student ID: 105177988)
 Huffman coding project to convert text to binary
 
 It converts the sampletest.txt to a binary file.
