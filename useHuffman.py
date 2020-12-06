@@ -1,12 +1,12 @@
-from huffman import HuffmanCoding
+from huffmancalled import HuffmanCodingClass
 import sys
 
-path = "sample.txt"
+path = "sampletest.txt"
 
-h = HuffmanCoding(path)
+huffman = HuffmanCodingClass(path)
 
-output_path = h.compress()
+output_path = huffman.compress()
 print("Compressed file path: " + output_path)
 
-decom_path = h.decompress(output_path)
+decom_path = huffman.decompress(output_path)
 print("Decompressed file path: " + decom_path)

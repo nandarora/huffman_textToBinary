@@ -1,19 +1,14 @@
 import heapq
 import os
 
-"""
-author: Bhrigu Srivastava
-website: https:bhrigu.me
-"""
-
-class HuffmanCoding:
+class HuffmanCodingClass:
 	def __init__(self, path):
 		self.path = path
 		self.heap = []
 		self.codes = {}
 		self.reverse_mapping = {}
 
-	class HeapNode:
+	class HeapNodeClass:
 		def __init__(self, char, freq):
 			self.char = char
 			self.freq = freq
@@ -27,13 +22,11 @@ class HuffmanCoding:
 		def __eq__(self, other):
 			if(other == None):
 				return False
-			if(not isinstance(other, HeapNode)):
-				return False
 			return self.freq == other.freq
 
 	# functions for compression:
 
-	def make_frequency_dict(self, text):
+	def makeFrequencyDict(self, text):
 		frequency = {}
 		for character in text:
 			if not character in frequency:
@@ -41,24 +34,24 @@ class HuffmanCoding:
 			frequency[character] += 1
 		return frequency
 
-	def make_heap(self, frequency):
+	def makeHeap(self, frequency):
 		for key in frequency:
-			node = self.HeapNode(key, frequency[key])
+			node = self.HeapNodeClass(key, frequency[key])
 			heapq.heappush(self.heap, node)
 
-	def merge_nodes(self):
+	def mergeNodes(self):
 		while(len(self.heap)>1):
 			node1 = heapq.heappop(self.heap)
 			node2 = heapq.heappop(self.heap)
 
-			merged = self.HeapNode(None, node1.freq + node2.freq)
+			merged = self.HeapNodeClass(None, node1.freq + node2.freq)
 			merged.left = node1
 			merged.right = node2
 
 			heapq.heappush(self.heap, merged)
 
 
-	def make_codes_helper(self, root, current_code):
+	def makeCodesHelper(self, root, current_code):
 		if(root == None):
 			return
 
@@ -67,14 +60,14 @@ class HuffmanCoding:
 			self.reverse_mapping[current_code] = root.char
 			return
 
-		self.make_codes_helper(root.left, current_code + "0")
-		self.make_codes_helper(root.right, current_code + "1")
+		self.makeCodesHelper(root.left, current_code + "0")
+		self.makeCodesHelper(root.right, current_code + "1")
 
 
-	def make_codes(self):
+	def makeCodes(self):
 		root = heapq.heappop(self.heap)
 		current_code = ""
-		self.make_codes_helper(root, current_code)
+		self.makeCodesHelper(root, current_code)
 
 
 	def get_encoded_text(self, text):
@@ -87,6 +80,7 @@ class HuffmanCoding:
 	def pad_encoded_text(self, encoded_text):
 		extra_padding = 8 - len(encoded_text) % 8
 		for i in range(extra_padding):
+			print(i)
 			encoded_text += "0"
 
 		padded_info = "{0:08b}".format(extra_padding)
@@ -108,16 +102,17 @@ class HuffmanCoding:
 
 	def compress(self):
 		filename, file_extension = os.path.splitext(self.path)
+		print(file_extension)
 		output_path = filename + ".bin"
 
 		with open(self.path, 'r+') as file, open(output_path, 'wb') as output:
 			text = file.read()
 			text = text.rstrip()
 
-			frequency = self.make_frequency_dict(text)
-			self.make_heap(frequency)
-			self.merge_nodes()
-			self.make_codes()
+			frequency = self.makeFrequencyDict(text)
+			self.makeHeap(frequency)
+			self.mergeNodes()
+			self.makeCodes()
 
 			encoded_text = self.get_encoded_text(text)
 			padded_encoded_text = self.pad_encoded_text(encoded_text)
@@ -125,14 +120,14 @@ class HuffmanCoding:
 			b = self.get_byte_array(padded_encoded_text)
 			output.write(bytes(b))
 
-		print("Compressed")
+		print("Comp")
 		return output_path
 
 
-	""" functions for decompression: """
+	""" decomp: """
 
 
-	def remove_padding(self, padded_encoded_text):
+	def removePadding(self, padded_encoded_text):
 		padded_info = padded_encoded_text[:8]
 		extra_padding = int(padded_info, 2)
 
@@ -141,7 +136,7 @@ class HuffmanCoding:
 
 		return encoded_text
 
-	def decode_text(self, encoded_text):
+	def decodeText(self, encoded_text):
 		current_code = ""
 		decoded_text = ""
 
@@ -157,6 +152,7 @@ class HuffmanCoding:
 
 	def decompress(self, input_path):
 		filename, file_extension = os.path.splitext(self.path)
+		print(file_extension)
 		output_path = filename + "_decompressed" + ".txt"
 
 		with open(input_path, 'rb') as file, open(output_path, 'w') as output:
@@ -169,12 +165,12 @@ class HuffmanCoding:
 				bit_string += bits
 				byte = file.read(1)
 
-			encoded_text = self.remove_padding(bit_string)
+			encoded_text = self.removePadding(bit_string)
 
-			decompressed_text = self.decode_text(encoded_text)
+			decompressed_text = self.decodeText(encoded_text)
 			
 			output.write(decompressed_text)
 
-		print("Decompressed")
+		print("Decomp")
 		return output_path
 
