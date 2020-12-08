@@ -12,3 +12,5 @@ It will give the following result for the presently written sampletest.txt:
 04 B8 ED 6C EA 3F B7 51 D4 6B 45 F8 BB 13 08 C3 FB 75 1D 45 B0 EF 79 22 94 99 66 D7 3C F8 3C 6E 60 43 38 9B CF 8F C7 29 7D 7B 13 C5 77 B4 13 B3 4F 2F D5 30 C0
 
 Note: The result will change if you change the text in sampletest.txt
+
+There is another code to convert image to binary which can be accessed through this url: https://github.com/nandarora/huffman_coding_imageToBinary
